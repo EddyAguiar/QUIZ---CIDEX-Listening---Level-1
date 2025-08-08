@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CIDEX Listening Quiz - Level 1 - Part 1</title>
+  <style>
+    body {
+      background-color: #1a1a2e;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      padding: 20px;
+      margin: 0;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #00ffcc;
+    }
+    .audio-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #16213e;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,255,170,0.2);
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    button {
+      background-color: #00ffcc;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #00bfa6;
+    }
+    .feedback {
+      font-size: 18px;
+      margin-top: 10px;
+    }
+    .correct {
+      color: lime;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .incorrect {
+      color: red;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+    .score-section {
+      text-align: center;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>✅ CIDEX Listening Quiz - Level 1 (Part 2)</h1>
+  <div class="audio-section">
+    <p>🎧 Listen to the official audio before starting the quiz:</p>
+    <audio controls>
+      <source src="ca-audio-prova-1.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+  <div class="quiz-container">
+    <div id="quiz"></div>
+    <div class="score-section hidden" id="score-section">
+      <h2>Your Score:</h2>
+      <p id="score"></p>
+      <button onclick="restartQuiz()">🔁 Restart Quiz</button>
+    </div>
+  </div>
+  <script>
+    const questions = [
+      {
+        text: "The man cooks the same thing every day.",
+        options: ["TRUE", "FALSE"],
+        correct: 1,
+        explanation: "He says he varies his meals, not cooking the same daily.",
+        example: "I like variety. Some days I make pasta, others I make soup."
+      },
+      {
+        text: "The man hates vegetables.",
+        options: ["TRUE", "FALSE"],
+        correct: 0,
+        explanation: "He expresses a strong dislike for vegetables.",
+        example: "I can't eat broccoli or spinach — disgusting!"
+      },
+      {
+        text: "The man eats one apple, two bananas, and one orange every day.",
+        options: ["TRUE", "FALSE"],
+        correct: 1,
+        explanation: "He eats fruit but not in that exact combination.",
+        example: "I eat an apple and sometimes grapes, not always bananas."
+      },
+      {
+        text: "Where is Marcel from?",
+        options: ["He is from Canada.", "He is from the USA.", "He is from France."],
+        correct: 2,
+        explanation: "He introduces himself and says he is from France.",
+        example: "Bonjour! I'm Marcel, from Paris, France."
+      },
+      {
+        text: "What is the relationship between Marcel and Celine?",
+        options: ["They are brother and sister.", "They are friends.", "They are coworkers."],
+        correct: 1,
+        explanation: "They greet each other and talk casually about life and interests.",
+        example: "It’s great to see you again, my friend!"
+      },
+      {
+        text: "What do Celine and Marcel talk about?",
+        options: ["Their summer holiday in Los Angeles.", "Their new job.", "A family reunion."],
+        correct: 0,
+        explanation: "They share memories from their vacation in Los Angeles.",
+        example: "Los Angeles was so sunny! I loved the beaches."
+      },
+      {
+        text: "What time is the flight to Chicago leaving at?",
+        options: ["At 11:00", "At 12:00", "At 12:35"],
+        correct: 2,
+        explanation: "The boarding announcement clearly says '12:35' for Chicago.",
+        example: "Flight 752 to Chicago is scheduled for departure at 12:35."
+      },
+      {
+        text: "What is the flight number to Chicago?",
+        options: ["Flight 752", "Flight 765", "Flight 754"],
+        correct: 0,
+        explanation: "The announcement or monitor shows the number 752.",
+        example: "Please proceed to Gate 5 for Flight 752 to Chicago."
+      },
+      {
+        text: "What time is the flight to London leaving at?",
+        options: ["At 11:55", "At 13:00", "At 14:30"],
+        correct: 0,
+        explanation: "The time for London’s departure is announced as 11:55.",
+        example: "Flight to London will depart at 11:55. Please head to your gate."
+      },
+      {
+        text: "Which gate is the flight to London going to leave from?",
+        options: ["Gate 5", "Gate 12", "Gate 15"],
+        correct: 1,
+        explanation: "The announcer directs passengers to Gate 12.",
+        example: "Passengers for London, please go to Gate 12."
+      },
+      {
+        text: "How long was Sepp Blatter FIFA's president?",
+        options: ["For 10 years", "For 17 years", "For 20 years"],
+        correct: 1,
+        explanation: "The speaker mentions Blatter’s 17-year term clearly.",
+        example: "Blatter served as president from 1998 to 2015."
+      },
+      {
+        text: "How old is Sepp Blatter?",
+        options: ["70", "79", "89"],
+        correct: 1,
+        explanation: "The audio identifies his age as 79 years old.",
+        example: "At 79, Blatter remains one of FIFA’s oldest presidents."
+      },
+      {
+        text: "How many times was Sepp Blatter elected as president?",
+        options: ["Five", "Three", "Seven"],
+        correct: 0,
+        explanation: "He was elected five times over his presidency.",
+        example: "Blatter won five FIFA elections before resigning."
+      },
+      {
+        text: "What happened to Sepp Blatter after the arrest of FIFA officials?",
+        options: ["He was promoted.", "He retired peacefully.", "He resigned."],
+        correct: 2,
+        explanation: "The audio states he stepped down after the scandal.",
+        example: "Following the arrests, Blatter submitted his resignation."
+      },
+      {
+        text: "In which city were FIFA officials arrested?",
+        options: ["Paris", "Zurich", "London"],
+        correct: 1,
+        explanation: "Zurich is mentioned in the report as the location of the arrest.",
+        example: "FIFA officials were taken into custody in a hotel in Zurich."
+      },
+         ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function renderQuestion() {
+      const container = document.getElementById('quiz');
+      container.innerHTML = '';
+
+      if (currentQuestion < questions.length) {
+        const q = questions[currentQuestion];
+        const html = `
+          <div class="question">
+            <h2>Question ${currentQuestion + 1}</h2>
+            <p>${q.text}</p>
+            <div class="options">
+              ${q.options.map((opt, i) => `<label><input type="radio" name="option" value="${i}"> ${opt}</label>`).join('')}
+            </div>
+            <button onclick="checkAnswer()">Submit</button>
+            <div class="feedback" id="feedback"></div>
+          </div>
+        `;
+        container.innerHTML = html;
+      } else {
+        showScore();
+      }
+    }
+
+    function checkAnswer() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      const feedback = document.getElementById('feedback');
+      if (!selected) {
+        alert("Please select an answer.");
+        return;
+      }
+      const value = parseInt(selected.value);
+      const q = questions[currentQuestion];
+      if (value === q.correct) {
+        feedback.innerHTML = `<div class='correct'>✅ CORRECT!</div><p>${q.explanation}</p><p><em>${q.example}</em></p><button onclick='nextQuestion()'>Next</button>`;
+        score++;
+      } else {
+        feedback.innerHTML = `<div class='incorrect'>❌ INCORRECT!</div><p>${q.explanation}</p><p><em>${q.example}</em></p><button onclick='nextQuestion()'>Next</button>`;
+      }
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      renderQuestion();
+    }
+
+    function showScore() {
+      const container = document.getElementById('quiz');
+      const scoreContainer = document.getElementById('score-section');
+      const scoreText = document.getElementById('score');
+      container.innerHTML = '';
+      scoreText.textContent = `${score} out of ${questions.length} (${Math.round((score/questions.length)*100)}%)`;
+      scoreContainer.classList.remove('hidden');
+    }
+
+    function restartQuiz() {
+      currentQuestion = 0;
+      score = 0;
+      document.getElementById('score-section').classList.add('hidden');
+      renderQuestion();
+    }
+
+    renderQuestion();
+  </script>
+</body>
+</html>
